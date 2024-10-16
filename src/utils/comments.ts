@@ -1,6 +1,6 @@
 import { context, getOctokit } from '@actions/github/lib/github';
 import { GitHub } from '@actions/github/lib/utils';
-import { formatFooterMarkdown, formatHeaderMarkdown, formatSummaryLinkMarkdown } from '../formatting/markdown';
+import { formatFooterMarkdown, formatHeaderMarkdown } from '../formatting/markdown';
 import { log } from './action';
 
 type Octokit = InstanceType<typeof GitHub>;
@@ -20,7 +20,7 @@ export const publishComment = async (
   postNew: boolean
 ): Promise<void> => {
   const context = getContext();
-  const { owner, repo, runId, issueNumber, commit } = context;
+  const { owner, repo, issueNumber, commit } = context;
 
   if (!token || !owner || !repo || issueNumber === -1) {
     log('Failed to post a comment');
@@ -31,9 +31,8 @@ export const publishComment = async (
   const octokit = getOctokit(token);
   const existingComment = await getExistingComment(octokit, context, header);
 
-  const summaryLink = formatSummaryLinkMarkdown(owner, repo, runId, title);
   const footer = commit ? formatFooterMarkdown(commit) : '';
-  const body = `${header}${message}${summaryLink}${footer}`;
+  const body = `${header}${message}${footer}`;
 
   if (existingComment && !postNew) {
     await octokit.rest.issues.updateComment({ owner, repo, comment_id: existingComment.id, body });

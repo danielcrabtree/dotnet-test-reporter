@@ -829,7 +829,7 @@ const markdown_1 = __nccwpck_require__(2519);
 const action_1 = __nccwpck_require__(2216);
 const publishComment = (token, title, message, postNew) => __awaiter(void 0, void 0, void 0, function* () {
     const context = getContext();
-    const { owner, repo, runId, issueNumber, commit } = context;
+    const { owner, repo, issueNumber, commit } = context;
     if (!token || !owner || !repo || issueNumber === -1) {
         (0, action_1.log)('Failed to post a comment');
         return;
@@ -837,9 +837,8 @@ const publishComment = (token, title, message, postNew) => __awaiter(void 0, voi
     const header = (0, markdown_1.formatHeaderMarkdown)(title);
     const octokit = (0, github_1.getOctokit)(token);
     const existingComment = yield getExistingComment(octokit, context, header);
-    const summaryLink = (0, markdown_1.formatSummaryLinkMarkdown)(owner, repo, runId, title);
     const footer = commit ? (0, markdown_1.formatFooterMarkdown)(commit) : '';
-    const body = `${header}${message}${summaryLink}${footer}`;
+    const body = `${header}${message}${footer}`;
     if (existingComment && !postNew) {
         yield octokit.rest.issues.updateComment({ owner, repo, comment_id: existingComment.id, body });
     }
