@@ -23,7 +23,7 @@ const run = async (): Promise<void> => {
     let summary = formatTitleHtml(title);
 
     const testResult = await processTestResults(resultsPath, allowFailedTests);
-    comment += formatResultMarkdown(testResult);
+    comment += formatResultMarkdown(testResult) + "<br><br><br><br><br>" + formatResultHtml(testResult, showFailedTestsOnly, showTestOutput);
     summary += formatResultHtml(testResult, showFailedTestsOnly, showTestOutput);
 
     if (coveragePath) {

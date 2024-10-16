@@ -272,7 +272,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         let comment = '';
         let summary = (0, html_1.formatTitleHtml)(title);
         const testResult = yield (0, results_1.processTestResults)(resultsPath, allowFailedTests);
-        comment += (0, markdown_1.formatResultMarkdown)(testResult);
+        comment += (0, markdown_1.formatResultMarkdown)(testResult) + "<br><br><br><br><br>" + (0, html_1.formatResultHtml)(testResult, showFailedTestsOnly, showTestOutput);
         summary += (0, html_1.formatResultHtml)(testResult, showFailedTestsOnly, showTestOutput);
         if (coveragePath) {
             const testCoverage = yield (0, coverage_1.processTestCoverage)(coveragePath, coverageType, coverageThreshold);
