@@ -270,16 +270,12 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { token, title, resultsPath, coveragePath, coverageType, coverageThreshold, postNewComment, allowFailedTests, showFailedTestsOnly, showTestOutput } = (0, utils_1.getInputs)();
         let comment = '';
-        let summary = (0, html_1.formatTitleHtml)(title);
         const testResult = yield (0, results_1.processTestResults)(resultsPath, allowFailedTests);
-        comment += (0, markdown_1.formatResultMarkdown)(testResult) + "<br><br><br><br><br>" + (0, html_1.formatResultHtml)(testResult, showFailedTestsOnly, showTestOutput);
-        summary += (0, html_1.formatResultHtml)(testResult, showFailedTestsOnly, showTestOutput);
+        comment += (0, html_1.formatResultHtml)(testResult, showFailedTestsOnly, showTestOutput);
         if (coveragePath) {
             const testCoverage = yield (0, coverage_1.processTestCoverage)(coveragePath, coverageType, coverageThreshold);
             comment += testCoverage ? (0, markdown_1.formatCoverageMarkdown)(testCoverage, coverageThreshold) : '';
-            summary += testCoverage ? (0, html_1.formatCoverageHtml)(testCoverage) : '';
         }
-        yield (0, utils_1.setSummary)(summary);
         yield (0, utils_1.publishComment)(token, title, comment, postNewComment);
     }
     catch (error) {
